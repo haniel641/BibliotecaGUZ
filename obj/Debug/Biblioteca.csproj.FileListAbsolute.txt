@@ -1,7 +1,0 @@
-C:\Users\herna_3izilsu\OneDrive\Escritorio\ejercicios de programacion\Biblioteca\bin\Debug\Biblioteca.exe.config
-C:\Users\herna_3izilsu\OneDrive\Escritorio\ejercicios de programacion\Biblioteca\bin\Debug\Biblioteca.exe
-C:\Users\herna_3izilsu\OneDrive\Escritorio\ejercicios de programacion\Biblioteca\bin\Debug\Biblioteca.pdb
-C:\Users\herna_3izilsu\OneDrive\Escritorio\ejercicios de programacion\Biblioteca\obj\Debug\Biblioteca.csproj.AssemblyReference.cache
-C:\Users\herna_3izilsu\OneDrive\Escritorio\ejercicios de programacion\Biblioteca\obj\Debug\Biblioteca.csproj.CoreCompileInputs.cache
-C:\Users\herna_3izilsu\OneDrive\Escritorio\ejercicios de programacion\Biblioteca\obj\Debug\Biblioteca.exe
-C:\Users\herna_3izilsu\OneDrive\Escritorio\ejercicios de programacion\Biblioteca\obj\Debug\Biblioteca.pdb
