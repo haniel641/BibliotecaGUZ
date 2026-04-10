@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BoksManager.cs" />
+    <Compile Include="BooksManager.cs" />
     <Compile Include="GenerosLiterarios.cs" />
     <Compile Include="Libros.cs" />
     <Compile Include="LoansManager.cs" />

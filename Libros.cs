@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Biblioteca.biblioteca;
 
 namespace Biblioteca
 {
@@ -20,7 +15,7 @@ namespace Biblioteca
 
         public Libros(string codigoLibro, string nombreLibro, string autorLibro, GenerosLiterarios Genero, int añoPublicacion, int cantidadTotal, DateTime fechaAdquisicion)
         {
-            this.codigoLibro = codigoLibro.ToLower();
+            this.codigoLibro = codigoLibro.ToUpper();
             this.nombreLibro = nombreLibro;
             this.autorLibro = autorLibro;
             this.Genero = Genero;

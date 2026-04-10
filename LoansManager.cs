@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace Biblioteca
 {
@@ -16,20 +13,20 @@ namespace Biblioteca
 
 
         private UsersManager users;
-        private BoksManager boks;
+        private BooksManager books;
 
-        public LoansManager(UsersManager users, BoksManager boks)
+        public LoansManager(UsersManager users, BooksManager boks)
         {
             this.users = users;
-            this.boks = boks;
+            this.books = boks;
         }
         public void prestamosUsuarios()
         {
             Usuarios haniel = users.BuscarUsers["001-0010201-2"];
             Usuarios alvarado = users.BuscarUsers["002-0012983-5"];
 
-            var libro1 = boks.BuscarLibros["N003"];
-            var libro2 = boks.BuscarLibros["N002"];
+            var libro1 = books.BuscarLibros["N003"];
+            var libro2 = books.BuscarLibros["N002"];
 
             buscarPrestamos.Add("HH098", new Prestamo(haniel, "HH098", false,
                 new List<Libros> { libro1, libro2 }, 2, new DateTime(2026, 3, 26), new DateTime(2026, 5, 26)));
@@ -98,62 +95,130 @@ namespace Biblioteca
 
         public void PrestarLibro()
         {
+            string AgregarcodigoPrestamo;
+            string codigo;
+            string AgregarFechaPrestamo;
+            string AgregarFechaDevolucion;
+
+
+
             Console.Clear();
             Console.WriteLine("Realizar Prestamos de Libros");
             Console.WriteLine();
-            Console.WriteLine("Ingrese cedula:");
+            Console.WriteLine("Ingrese su cedula de identidad:");
             string cedula = Console.ReadLine();
 
             if (!users.BuscarUsers.ContainsKey(cedula))
             {
-                Console.WriteLine("Usuario no existe");
+                Console.WriteLine("error: El usuario no existe. Por favor debe crear un usuario.");
                 return;
             }
+
+
 
             Console.WriteLine("Ingrese codigo del libro:");
-            string codigo = Console.ReadLine();
-
-            if (!boks.BuscarLibros.ContainsKey(codigo))
+            do
             {
-                Console.WriteLine("Libro no existe");
-                return;
-            }
 
-            var libro = boks.BuscarLibros[codigo];
+                codigo = Console.ReadLine().ToUpper(); ;
+
+                if (!books.BuscarLibros.ContainsKey(codigo))
+                {
+                    Console.WriteLine("El libro que estas buscando no existe, agrega otra vez el codigo del libro correcto: ");
+
+                }
+
+            } while (!books.BuscarLibros.ContainsKey(codigo));
+
+
+
+
+            var libro = books.BuscarLibros[codigo];
 
             if (libro.cantidadDisponible <= 0)
             {
-                Console.WriteLine("No hay disponibilidad");
+                Console.WriteLine("Lo siento el libro que estas buscando no esta disponible.");
                 return;
             }
-            Console.WriteLine("Agrega un codigo del prestamo:");
-            string AgregarcodigoPrestamo = Console.ReadLine();
 
-            Console.WriteLine("Porfavor agrega la fecha actual para realizar el prestamo:");
-            string AgregarFechaPrestamo = Console.ReadLine();
 
-            if (DateTime.TryParse(AgregarFechaPrestamo, out DateTime fechaPrestamo))
+
+            Console.WriteLine("Agrega un codigo unico al prestamo:");
+            do
             {
-                Console.WriteLine($"La fecha del prestamo ha sido registrada correctamente: {fechaPrestamo}");
-            }
 
-            Console.WriteLine("Porfavor agregue una fecha de devolucion:");
-            string AgregarFechaDevolucion = Console.ReadLine();
+                AgregarcodigoPrestamo = Console.ReadLine().ToUpper();
+                if (AgregarcodigoPrestamo.Length > 5 || AgregarcodigoPrestamo.Length < 5)
+                {
+                    Console.WriteLine("El codigo del prestamo debe tener maximo 5 caracteres, (formato: AA111)");
+                }
+                if (buscarPrestamos.ContainsKey(AgregarcodigoPrestamo))
+                {
+                    Console.WriteLine("El codigo del prestamo a esta en uso, Agrega otro codigo ");
 
-            if (DateTime.TryParse(AgregarFechaDevolucion, out DateTime fechaDevolucion))
+                }
+
+            } while (buscarPrestamos.ContainsKey(AgregarcodigoPrestamo) || AgregarcodigoPrestamo.Length > 5 || AgregarcodigoPrestamo.Length < 5);
+
+
+            DateTime fechaPrestamo;
+            Console.WriteLine("Porfavor agrega la fecha actual para realizar el prestamo (formato: 00/00/0000):");
+
+            do
             {
-                Console.WriteLine($"La fecha de devolucion ha sido registrada correctamente: {fechaDevolucion}");
-            }
+                AgregarFechaPrestamo = Console.ReadLine();
+                if ((!DateTime.TryParse(AgregarFechaPrestamo, out fechaPrestamo)))
+                {
+                    Console.WriteLine("La fecha no tiene el formato correcto. Porfavor intente otra vez (formato: 00/00/0000): ");
+
+                }
+                if (DateTime.TryParse(AgregarFechaPrestamo, out fechaPrestamo))
+                {
+                    Console.WriteLine($"La fecha del prestamo ha sido registrada correctamente: {fechaPrestamo}");
+                }
+
+            } while (!DateTime.TryParse(AgregarFechaPrestamo, out fechaPrestamo));
+
+
+
+            DateTime fechaDevolucion;
+            Console.WriteLine("Porfavor agregue una fecha de devolucion (formato: 00/00/0000):");
+            do
+            {
+
+                AgregarFechaDevolucion = Console.ReadLine();
+                if ((!DateTime.TryParse(AgregarFechaDevolucion, out fechaDevolucion)))
+                {
+                    Console.WriteLine("La fecha no tiene el formato correcto. Porfavor intente otra vez (formato: 00/00/0000): ");
+
+                }
+                if (fechaDevolucion < fechaPrestamo)
+                {
+                    Console.WriteLine("La feca de devolucion no debe ser menor a la feca del inicio del prestamo. Intente otra vez");
+                }
+                if (DateTime.TryParse(AgregarFechaDevolucion, out fechaDevolucion))
+                {
+                    Console.WriteLine($"La fecha de devolucion ha sido registrada correctamente: {fechaDevolucion}");
+                }
+
+
+            } while (!DateTime.TryParse(AgregarFechaDevolucion, out fechaDevolucion) || fechaDevolucion < fechaPrestamo);
             libro.cantidadDisponible--;
 
+
+
+
             var usuario = users.BuscarUsers[cedula];
+
+
 
             string codigoPrestamo = AgregarcodigoPrestamo;
 
             buscarPrestamos.Add(codigoPrestamo, new Prestamo(usuario, codigoPrestamo, false,
                 new List<Libros> { libro }, 1, fechaPrestamo, fechaDevolucion));
 
-            Console.WriteLine("Prestamo realizado");
+
+            Console.WriteLine("El prestamo ha sido realizado correctamente.");
         }
 
 
@@ -163,12 +228,12 @@ namespace Biblioteca
             Console.Clear();
             Console.WriteLine("Realizar Devolucion de Libros");
             Console.WriteLine();
-            Console.WriteLine("Ingrese codigo del prestamo:");
+            Console.WriteLine("Porfavor ingrese codigo del prestamo:");
             string codigo = Console.ReadLine();
 
             if (!buscarPrestamos.ContainsKey(codigo))
             {
-                Console.WriteLine("No existe");
+                Console.WriteLine("El prestamo que estas buscando NO existe, porfavor revise el codigo del prestamo");
                 return;
             }
 
@@ -176,7 +241,8 @@ namespace Biblioteca
 
             if (prestamo.Devuelto)
             {
-                Console.WriteLine("Ya fue devuelto");
+                Console.WriteLine($"El prestamo {codigo} ya fue devuelto");
+
                 return;
             }
 
@@ -188,7 +254,7 @@ namespace Biblioteca
             prestamo.Devuelto = true;
             prestamo.estado = "Libros devueltos";
 
-            Console.WriteLine($"El libro se ha devuelto correctamente");
+            Console.WriteLine($"El libro se ha devuelto correctamente. Gracias por utilizar nuestro servicio.");
         }
     }
 }

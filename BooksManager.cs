@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace Biblioteca
 {
-   public class BoksManager
+    public class BooksManager
     {
 
         private List<GenerosLiterarios> generos = new List<GenerosLiterarios>();
@@ -86,7 +84,7 @@ namespace Biblioteca
         {
             Console.Clear();
             Console.WriteLine("Porfavor ingrese el codigo del libro que quieres buscar");
-            string Codigo = Console.ReadLine();
+            string Codigo = Console.ReadLine().ToUpper();
 
             if (buscarLibros.TryGetValue(Codigo, out Libros libro))
             {
